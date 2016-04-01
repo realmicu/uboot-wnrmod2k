@@ -1,0 +1,2 @@
+# ROM version
+TEXT_BASE = 0x9f000000

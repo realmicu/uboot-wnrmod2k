@@ -1,0 +1,22 @@
+GIT repository:
+===============
+
+git://itgserver/pub/scm/boot/u-boot/spencer/u-boot.git
+U-Boot-1_1_4-Atheros-AP94-WNDR3700U branch
+
+How to build:
+=============
+
+cd u-boot
+make wndr3700v2_config
+make
+
+Steps to upgrade u-boot:
+========================
+
+In the meantime, u-boot takes 5 erase blocks (5*0x10000)
+
+ar7100> loady 0x80800000
+ar7100> crc32 0x80800000 ${filesize}
+ar7100> erase 0xbf000000 +50000
+ar7100> cp.b 0x80800000 0xbf000000 0x50000
