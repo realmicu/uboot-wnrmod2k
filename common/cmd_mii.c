@@ -968,6 +968,22 @@ U_BOOT_CMD(
 	" For instance: snset 1ML1747D0000B\n"
 );
 
+int do_snshow(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+{
+	u8 sn[SERIAL_NUMBER_LENGTH + 1];
+	memset(sn, 0, sizeof(sn));
+	get_board_data(SERIAL_NUMBER_OFFSET, SERIAL_NUMBER_LENGTH, sn);
+	printf("serial number : %s\n", sn);
+	return 0;
+}
+
+U_BOOT_CMD(
+	snshow, 1, 0, do_snshow,
+	"snshow  - show serial number\n",
+	"snshow  - show device board serial number\n"
+	"          stored in ART area\n"
+);
+
 #endif
 
 #if defined(REGION_NUMBER_OFFSET) && defined(REGION_NUMBER_LENGTH)
