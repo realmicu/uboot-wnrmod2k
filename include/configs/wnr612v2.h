@@ -1,6 +1,6 @@
 /*
  * This file contains configuration parameters
- * specific for Netgear WNR2000v3 router.
+ * specific for Netgear WNR612v2 router.
  */
 
 #ifndef __WNR612V2_H
@@ -8,7 +8,7 @@
 
 #define ATHEROS_PRODUCT_ID              138
 
-#define IH_MAGIC_DEFAULT		0x31303030
+#define IH_MAGIC_DEFAULT		0x32303631
 
 #define LOW_DRIVE_STRENGTH
 
