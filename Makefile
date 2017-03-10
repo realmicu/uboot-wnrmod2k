@@ -328,10 +328,10 @@ wnr2200_config:		unconfig
 	@ >include/config.h
 	@echo "#define CONFIG_AR7240 1" >>include/config.h
 	@echo "#define CONFIG_WNR2200 1" >>include/config.h
-	@./mkconfig -a wnr2200 mips mips wnr2200 ar7240 ar7240
 ifdef FLASH_SIZE
 	@echo "#define FLASH_SIZE" $(FLASH_SIZE) >>include/config.h
 endif
+	@./mkconfig -a wnr2200 mips mips wnr2200 ar7240 ar7240
 wnr2000v3_config:	unconfig
 	@ >include/config.h
 	@echo "#define CONFIG_AR7240 1" >>include/config.h
