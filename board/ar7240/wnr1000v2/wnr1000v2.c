@@ -348,7 +348,7 @@ int board_match_image_hw_id (ulong fw_image_addr)
     unsigned char board_hw_id[BOARD_HW_ID_LENGTH + 1];
     unsigned char image_hw_id[BOARD_HW_ID_LENGTH + 1];
     unsigned char image_model_id[BOARD_MODEL_ID_LENGTH + 1];
-    unsigned char image_version[20];
+    unsigned char image_version[32];
 
     /* For wnr1000v2 firmware old version, do not support HW ID yet.
      * We do not support HW ID in these old firmware image.

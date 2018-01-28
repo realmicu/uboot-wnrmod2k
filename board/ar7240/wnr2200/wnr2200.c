@@ -471,7 +471,7 @@ int board_match_image_hw_id (ulong fw_image_addr)
     char board_hw_id[BOARD_HW_ID_LENGTH + 1];
     char image_hw_id[BOARD_HW_ID_LENGTH + 1];
     char image_model_id[BOARD_MODEL_ID_LENGTH + 1];
-    char image_version[20];
+    char image_version[32];
 
     memset(image_model_id, 0, sizeof(image_model_id));
     memset(image_version, 0, sizeof(image_version));
