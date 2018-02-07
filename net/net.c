@@ -2039,7 +2039,7 @@ void update_firmware(ulong addr, int firmware_size)
 			overflow_count = 0;
 		}
 	}
-#elif defined(CONFIG_WNR1000V2) || defined(CONFIG_WNR1100) || defined(CONFIG_WNR612) || defined(CONFIG_WNR2200) || defined(CONFIG_WNR2000V3) || defined(CONFIG_WNDR3700V1H2)
+#elif defined(CONFIG_WNR1000V2) || defined(CONFIG_WNR1100) || defined(CONFIG_WNR612) || defined(CONFIG_WNR2200) || defined(CONFIG_WNR2000V3) || defined(CONFIG_WNDR3700U) || defined(CONFIG_WNDR3700V1H2)
 	flash_sect_erase (CFG_IMAGE_ADDR_BEGIN, CFG_IMAGE_ADDR_END-1);
 #else
 	unsigned int s_first,s_end;

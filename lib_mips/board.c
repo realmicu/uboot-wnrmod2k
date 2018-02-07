@@ -108,13 +108,11 @@ uint32_t GetMagicNumberOfBoard(void)
 #endif
 }
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 /*return value 0:not pressed, 1:pressed*/
 int reset_button_is_press(void)
 {
-#if defined(CONFIG_WNDR3700U)
-	return wndr3700u_reset_button_is_press();
-#elif defined(CONFIG_WNR1000V2)
+#if defined(CONFIG_WNR1000V2)
 	return wnr1000v2_reset_button_is_press();
 #elif defined(CONFIG_WNR1100)
 	return wnr1100_reset_button_is_press();
@@ -126,12 +124,10 @@ int reset_button_is_press(void)
 }
 #endif
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 void reset_default_LedSet(void)
 {
-#if defined(CONFIG_WNDR3700U)
-	wndr3700u_reset_default_LedSet();
-#elif defined(CONFIG_WNR1000V2)
+#if defined(CONFIG_WNR1000V2)
 	wnr1000v2_reset_default_LedSet();
 #elif defined(CONFIG_WNR1100)
 	wnr1100_reset_default_LedSet();
@@ -143,13 +139,11 @@ void reset_default_LedSet(void)
 }
 #endif
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 /*ledstat 0:on; 1:off*/
 void power_led(int ledstat)
 {
-#if defined(CONFIG_WNDR3700U)
-	wndr3700u_power_led(ledstat);
-#elif defined(CONFIG_WNR1000V2)
+#if defined(CONFIG_WNR1000V2)
 	wnr1000v2_power_led(ledstat);
 #elif defined(CONFIG_WNR1100)
 	wnr1100_power_led(ledstat);
@@ -161,13 +155,11 @@ void power_led(int ledstat)
 }
 #endif
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 /*ledstat 0:on; 1:off*/
 void test_led(int ledstat)
 {
-#if defined(CONFIG_WNDR3700U)
-	wndr3700u_test_led(ledstat);
-#elif defined(CONFIG_WNR1000V2)
+#if defined(CONFIG_WNR1000V2)
 	wnr1000v2_test_led(ledstat);
 #elif defined(CONFIG_WNR1100)
 	wnr1100_test_led(ledstat);
@@ -181,7 +173,7 @@ void test_led(int ledstat)
 
 void start_tftp_recovery_mode(void)
 {
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
     power_led(0);
 #else
     board_power_led(0);
@@ -190,13 +182,11 @@ void start_tftp_recovery_mode(void)
     StartTftpServerToRecoveFirmware ();/*Enter recovery mode when press reset button to upgrade mode*/
 }
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 /*erase the config sector of flash*/
 void reset_default(void)
 {
-#if defined(CONFIG_WNDR3700U)
-	wndr3700u_reset_default();
-#elif defined(CONFIG_WNR1000V2)
+#if defined(CONFIG_WNR1000V2)
 	wnr1000v2_reset_default();
 #elif defined(CONFIG_WNR1100)
 	wnr1100_reset_default();
@@ -585,7 +575,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 #ifdef FIRMWARE_RECOVER_FROM_TFTP_SERVER
 		int i,j;
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 		NetSetTimeout (CFG_HZ/10,reset_default_LedSet);
 #else
 		NetSetTimeout (CFG_HZ/10,board_reset_default_LedSet);
@@ -602,7 +592,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 			/*each cycle delay 1 s (100 * 10000 us)*/
 			for (i = 0;i< 100;i++) {
 				//reset button isn't pressed
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 				if(!reset_button_is_press())
 #else
 				if(!board_reset_button_is_press())
@@ -613,7 +603,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 				/*first cycle power on test led*/
 				if(!i)
 				{
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 					test_led(0);
 #else
 					board_test_led(0);
@@ -637,7 +627,7 @@ next:
 		if(!factory_default)
 			goto Normal;
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 		reset_default();
 #else
 		board_reset_default();

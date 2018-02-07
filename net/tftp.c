@@ -487,7 +487,7 @@ TftpServerTimeout (void)
 		{
 			printf("Upgrade Mode\b\b\b\b\b\b\b\b\b\b\b\b");
 			/*power LED (GREEN) 0.25 second on */
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 			power_led(0);
 #else
 			board_power_led(0);
@@ -495,7 +495,7 @@ TftpServerTimeout (void)
 			NetSetTimeout ((CFG_HZ*1)/4, TftpServerTimeout);
 		}else{
 			/* power LED (GREEN) 0.75 second off */
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 			power_led(1);
 #else
 			board_power_led(1);

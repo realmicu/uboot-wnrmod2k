@@ -100,7 +100,7 @@ void Nmrp_Closing_Timeout(void)
 	if (++Nmrp_Closing_TimeoutCount > NMRP_MAX_RETRY_CLOSE) {
 		puts("\n close retry count exceed;stay idle and blink\n");
 		Nmrp_Closing_TimeoutCount = 0;
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 		reset_default();
 #else
 		board_reset_default();
@@ -134,14 +134,14 @@ void Nmrp_Led_Flashing_Timeout(void)
 
 		NmrpLedCount++;
 		if ((NmrpLedCount % 2) == 1) {
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 			test_led(0);
 #else
 			board_test_led(0);
 #endif
 			udelay(500000);
 		} else {
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 			test_led(1);
 #else
 			board_test_led(1);
@@ -150,7 +150,7 @@ void Nmrp_Led_Flashing_Timeout(void)
 		}
 	}
 	/*press ctl+c, turn on test led,then normally boot*/
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 	test_led(0);
 #else
 	board_test_led(0);
@@ -310,7 +310,7 @@ extern void NmrpSend(void)
 		break;
 
 	case STATE_CLOSED:
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 		reset_default();
 #else
 		board_reset_default();
@@ -471,7 +471,7 @@ void NmrpHandler(uchar * pkt, unsigned dest, unsigned src, unsigned type)
 				int opt_hdr_len = sizeof(opt->type) + sizeof(opt->len);
 				if (memcmp(opt->value.magicno, MAGICNO, opt->len - opt_hdr_len) == 0){
 					NmrpState = STATE_LISTENING;
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 					test_led(0);
 #else
 					board_test_led(0);

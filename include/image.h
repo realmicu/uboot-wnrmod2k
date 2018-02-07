@@ -134,9 +134,9 @@
 #define IH_COMP_LZMA		3	/* lzma  Compression Used	*/
 
 #if defined(CONFIG_WNDR3700U)
-#define IH_MAGIC	0x33373030	/* Image Magic Number       */
+#define IH_MAGIC	0x33373030	/* Image Magic Number "3700" */
 #elif defined(CONFIG_WNDR3700V1H2)
-#define IH_MAGIC	0x33373031	/* Image Magic Number "wndr3700v1h2" */
+#define IH_MAGIC	0x33373031	/* Image Magic Number "3701" */
 #elif defined(CONFIG_WNR1000V2) || defined(CONFIG_WNR612) || defined(CONFIG_WNR2200) || defined(CONFIG_WNR2000V3)
 #define IH_MAGIC	GetMagicNumberOfBoard()	/* WNR1000v2-VC's Image Magic Number is "1000", WNR1000v2's one is "1001" and WNR612's Magic Number is "6122"*/
 #elif defined(CONFIG_WNR1100)

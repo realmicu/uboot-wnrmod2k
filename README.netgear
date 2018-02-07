@@ -7,6 +7,7 @@
  * WNR612v2
  * WNR1000v2 (v2h2)
  * WNR2200
+ * WNDR3700v1 (u)
  * WNDR3700v2 (v1h2)
 
  --------------------
@@ -15,9 +16,17 @@
 
  # make MODEL_config [ FLASH_SIZE=n ]
 
- Where MODEL is one of following: wnr2000v3 , wnr612v2 , wnr1000v2 , wnr2200,
- wndr3700v2 and n is 4 , 8 or 16 (flash size in Megabytes) - if not defined,
- board's default is used.
+   Where MODEL is one of following:
+
+   wnr2000v3
+   wnr612v2
+   wnr1000v2
+   wnr2200
+   wndr3700v1
+   wndr3700v2
+
+   and n is 4 , 8 or 16 (flash size in Megabytes) - if not defined,
+   board's default is used.
 
  # make
-  
+

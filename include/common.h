@@ -259,7 +259,7 @@ void	pciinfo	      (int, int);
 int	misc_init_r   (void);
 #endif
 
-#if defined(CONFIG_WNDR3700U)||defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
+#if defined(CONFIG_WNR1000V2)||defined(CONFIG_WNR1100)||defined(CONFIG_WNR612)
 int reset_button_is_press(void);
 void reset_default_LedSet(void);
 void power_led(int);

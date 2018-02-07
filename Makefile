@@ -354,6 +354,17 @@ ifdef FLASH_SIZE
 	@echo "#define FLASH_SIZE" $(FLASH_SIZE) >>include/config.h
 endif
 	@./mkconfig -a wndr3700v1h2 mips mips wndr3700v1h2 ar7100 ar7100
+wndr3700u_config:	unconfig
+	@ >include/config.h
+	@echo "#define CONFIG_AR7100 1" >>include/config.h
+	@echo "#define CONFIG_WNDR3700U 1" >>include/config.h
+	@echo "#define CONFIG_WNDR3700U_LED 1" >>include/config.h
+ifdef FLASH_SIZE
+	@echo "#define FLASH_SIZE" $(FLASH_SIZE) >>include/config.h
+endif
+	@./mkconfig -a wndr3700u mips mips wndr3700u ar7100 ar7100
+
+wndr3700v1_config:	wndr3700u_config
 
 wndr3700v2_config:	wndr3700v1h2_config
 

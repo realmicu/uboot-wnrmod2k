@@ -176,12 +176,7 @@ write_buff(flash_info_t *info, uchar *source, ulong addr, ulong len)
         ar7100_spi_write_page(dst, src, len_this_lp);
         total += len_this_lp;
     }
-
-#if defined(CONFIG_WNDR3700U_LED) && defined(FIRMWARE_RECOVER_FROM_TFTP_SERVER)
-    /*write finished , test led on*/
-    test_led(0);
-#endif
-#if defined(CONFIG_WNDR3700V1H2_LED) && defined(FIRMWARE_RECOVER_FROM_TFTP_SERVER)
+#if (defined(CONFIG_WNDR3700U_LED) || defined(CONFIG_WNDR3700V1H2_LED)) && defined(FIRMWARE_RECOVER_FROM_TFTP_SERVER)
     /*write finished , test led on*/
     board_test_led(0);
 #endif
