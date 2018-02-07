@@ -51,6 +51,8 @@
  * It's HW_ID would be "29763266+08+64".
  * "(8 MSB of PCB number)+(Flash size)+(SDRam size)", length should be 14
  */
+/* HW ID disabled as LEDE does not expect one for this model */
+#if 0
 #if (FLASH_SIZE == 16)
 #	define BOARD_HW_ID_DEFAULT		"29763266+16+64"
 #elif (FLASH_SIZE == 8)
@@ -58,8 +60,9 @@
 #else /* FLASH_SIZE == 4 */
 #	define BOARD_HW_ID_DEFAULT		"29763266+04+64"
 #endif
+#endif /* if 0 */
 
-#define BOARD_MODEL_ID_DEFAULT		"WNDR3700u"
+#define BOARD_MODEL_ID_DEFAULT		"WNDR3700"
 
 /* 6(LAN mac) + 6(WAN mac) + 6(wlan5g) = 18(0x12) */
 #define WPSPIN_OFFSET			0x12

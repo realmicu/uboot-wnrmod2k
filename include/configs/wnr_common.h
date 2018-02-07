@@ -107,7 +107,7 @@
 #ifdef ENABLE_DYNAMIC_CONF
 #	define UBOOT_ENV_SEC_START	(CFG_ENV_ADDR)
 #	define CFG_FLASH_MAGIC		0xaabacada  
-#	define CFG_FLASH_MAGIC_F	(CFG_ENV_ADDR + CFG_FLASH_SECTOR_SIZE - 0x20)
+#	define CFG_FLASH_MAGIC_F	(CFG_ENV_ADDR + CFG_ENV_SIZE - 0x20)
 #	define CFG_FLASH_SECTOR_SIZE_F	*(volatile int *)(CFG_FLASH_MAGIC_F + 0x4)
 #	define CFG_FLASH_SIZE_F		*(volatile int *)(CFG_FLASH_MAGIC_F + 0x8)
 #	define CFG_MAX_FLASH_SECT_F    	(CFG_MAX_FLASH_SECT)
@@ -232,7 +232,7 @@
 /* DDR value from Flash */
 #ifdef ENABLE_DYNAMIC_CONF
 #	define CFG_DDR_MAGIC			0xaabacada  
-#	define CFG_DDR_MAGIC_F			(UBOOT_ENV_SEC_START + CFG_FLASH_SECTOR_SIZE - 0x30)
+#	define CFG_DDR_MAGIC_F			(UBOOT_ENV_SEC_START + CFG_ENV_SIZE - 0x30)
 #	define CFG_DDR_CONFIG_VAL_F		*(volatile int *)(CFG_DDR_MAGIC_F + 4)
 #	define CFG_DDR_CONFIG2_VAL_F		*(volatile int *)(CFG_DDR_MAGIC_F + 8)
 #	define CFG_DDR_EXT_MODE_VAL_F		*(volatile int *)(CFG_DDR_MAGIC_F + 12)

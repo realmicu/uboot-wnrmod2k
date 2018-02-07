@@ -47,19 +47,19 @@
  */
 
 /*
- * wndr3700v2 hardware's PCB number is 2976360001, 16M Flash, 64M SDRam
- * It's HW_ID would be "29763600+08+64".
+ * OpenWrt/LEDE reports that wndr3700v2 hardware's PCB number begins
+ * with 29763654, 16M Flash, 64M SDRam. It's HW_ID would be "29763654+16+64".
  * "(8 MSB of PCB number)+(Flash size)+(SDRam size)", length should be 14
  */
-//#if (FLASH_SIZE == 16)
-//#	define BOARD_HW_ID_DEFAULT		"29763600+16+64"
-//#elif (FLASH_SIZE == 8)
-//#	define BOARD_HW_ID_DEFAULT		"29763600+08+64"
-//#else /* FLASH_SIZE == 4 */
-//#	define BOARD_HW_ID_DEFAULT		"29763600+04+64"
-//#endif
+#if (FLASH_SIZE == 16)
+#	define BOARD_HW_ID_DEFAULT		"29763654+16+64"
+#elif (FLASH_SIZE == 8)
+#	define BOARD_HW_ID_DEFAULT		"29763654+08+64"
+#else /* FLASH_SIZE == 4 */
+#	define BOARD_HW_ID_DEFAULT		"29763654+04+64"
+#endif
 
-//#define BOARD_MODEL_ID_DEFAULT		"WNDR3700v2"
+#define BOARD_MODEL_ID_DEFAULT		"WNDR3700v2"
 
 /* 6(LAN mac) + 6(WAN mac) + 6(wlan5g) = 18(0x12) */
 #define WPSPIN_OFFSET			0x12
