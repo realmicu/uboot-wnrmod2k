@@ -13,9 +13,6 @@ ulong NmrpOuripaddr;
 ulong NmrpOuripSubnetMask;
 ulong NmrpFwOption;
 int NmrpFwUPOption = 0;
-int NmrpSTUPOption = 0;
-int NmrpStringTableUpdateCount = 0;
-int NmrpStringTableUpdateIndex = 0;
 int NmrpState = 0;
 ulong Nmrp_active_start=0;
 static ulong NmrpBlock;
@@ -34,9 +31,6 @@ uchar NmrpServerEther[6] = { 0, 0, 0, 0, 0, 0 };
 static u16 NmrpDevRegionOption = 0;
 #endif
 static uchar NmrpFirmwareFilename[FIRMWARE_FILENAME_LEN] = FIRMWARE_FILENAME;
-static u32 NmrpStringTableBitmask = 0;
-static uchar NmrpStringTableFilename[STRING_TABLE_FILENAME_LEN] = {0};
-static int NmrpStringTableUpdateList[STRING_TABLE_NUMBER_MAX] = {0};
 ulong NmrpAliveTimerStart = 0;
 ulong NmrpAliveTimerBase = 0;
 int NmrpAliveTimerTimeout = NMRP_TIMEOUT_ACTIVE;
@@ -52,7 +46,6 @@ void NmrpSetTimeout(unchar, ulong, nmrp_thand_f *);
 
 void Nmrp_Led_Flashing_Timeout(void);
 
-extern void UpgradeStringTableFromNmrpServer(int table_num);
 extern void ResetBootup_usual(void);
 extern int set_region(u16 host_region_number);
 
@@ -196,58 +189,27 @@ extern void NmrpSend(void)
 		*((u8 *) pkt) = 0;
 		pkt++;
 #if defined(CFG_SINGLE_FIRMWARE)
-		/* Recv ST-UP option, upgrade string table.
-		 * add FILE-NAME option to TFTP-UL-REQ
-		 * value of FILE-NAME would like "string table 01"*/
-		if (NmrpSTUPOption == 1) {
-			/* Append the total length to packet
-			 * NMRP_HEADER_LEN for the length of "Reserved", "Code", "Identifier", "Length"
-			 * STRING_TABLE_FILENAME_OPT_LEN for the length of "Options". */
-			*((u16 *) pkt) = htons((NMRP_HEADER_LEN + STRING_TABLE_FILENAME_OPT_LEN));
-			pkt += 2;
-
-			/* Append NMRP option type FILE-NAME */
-			*((u16 *) pkt) = NMRP_OPT_FILE_NAME;
-			pkt += 2;
-
-			/* Append the total length of NMRP option FILE-NAME */
-			*((u16 *) pkt) = STRING_TABLE_FILENAME_OPT_LEN;
-			pkt += 2;
-
-			/* Append the string table filename to FILE-NAME option value */
-			int i;
-			sprintf(NmrpStringTableFilename, "%s%02d", STRING_TABLE_FILENAME_PREFIX,\
-				NmrpStringTableUpdateList[NmrpStringTableUpdateIndex]);
-			for (i = 0; i < STRING_TABLE_FILENAME_LEN; i++) {
-				*((u8 *) pkt) = NmrpStringTableFilename[i];
-				pkt++;
-			}
-			printf("\nReq %s\n", NmrpStringTableFilename);
-		/* No string table updates, or all string table updates finished.
-		 * And received FW-UP option, upgrading firmware,
+		/* Received FW-UP option, upgrading firmware,
 		 * add FILE-NAME option to TFTP-UL-REQ */
-		} else {
-			/* Append the total length to packet
-			 * NMRP_HEADER_LEN for the length of "Reserved", "Code", "Identifier", "Length"
-			 * STRING_TABLE_FILENAME_OPT_LEN for the length of "Options". */
-			*((u16 *) pkt) = htons((NMRP_HEADER_LEN + FIRMWARE_FILENAME_OPT_LEN));
-			pkt += 2;
+		/* Append the total length to packet
+		 * NMRP_HEADER_LEN for the length of "Reserved", "Code", "Identifier", "Length" */
+		*((u16 *) pkt) = htons((NMRP_HEADER_LEN + FIRMWARE_FILENAME_OPT_LEN));
+		pkt += 2;
 
-			/* Append NMRP option type FILE-NAME */
-			*((u16 *) pkt) = NMRP_OPT_FILE_NAME;
-			pkt += 2;
+		/* Append NMRP option type FILE-NAME */
+		*((u16 *) pkt) = NMRP_OPT_FILE_NAME;
+		pkt += 2;
 
-			/* Append the total length of NMRP option FILE-NAME for firmware*/
-			*((u16 *) pkt) = FIRMWARE_FILENAME_OPT_LEN;
-			pkt += 2;
+		/* Append the total length of NMRP option FILE-NAME for firmware*/
+		*((u16 *) pkt) = FIRMWARE_FILENAME_OPT_LEN;
+		pkt += 2;
 
-			/* Append the firmware filename to FILE-NAME option value */
-			sprintf(NmrpFirmwareFilename, "%s\n", FIRMWARE_FILENAME);
-			int i;
-			for (i = 0; i < FIRMWARE_FILENAME_LEN; i++) {
-				*((u8 *) pkt) = NmrpFirmwareFilename[i];
-				pkt++;
-			}
+		/* Append the firmware filename to FILE-NAME option value */
+		sprintf(NmrpFirmwareFilename, "%s\n", FIRMWARE_FILENAME);
+		int i;
+		for (i = 0; i < FIRMWARE_FILENAME_LEN; i++) {
+			*((u8 *) pkt) = NmrpFirmwareFilename[i];
+			pkt++;
 		}
 #else
 		*((u16 *) pkt) = htons(6);
@@ -255,13 +217,7 @@ extern void NmrpSend(void)
 #endif
 		len = pkt - xp;
 		(void)NetSendPacket((u8 *) NetTxPacket, eth_len + len);
-#if defined(CFG_SINGLE_FIRMWARE)
-		int update_table_num = NmrpStringTableUpdateList[NmrpStringTableUpdateIndex];
-		if (NmrpSTUPOption == 1)
-			UpgradeStringTableFromNmrpServer(update_table_num);
-		else
-			UpgradeFirmwareFromNmrpServer();
-#elif defined(CONFIG_WNR1000V2) || defined(CONFIG_WNR612) || defined(CONFIG_WNR2200) || defined(CONFIG_WNR2000V3)
+#if defined(CONFIG_WNR1000V2) || defined(CONFIG_WNR612) || defined(CONFIG_WNR2200) || defined(CONFIG_WNR2000V3)
 		UpgradeFirmwareFromNmrpServer();
 #else
 		StartTftpServerToRecoveFirmware();
@@ -396,22 +352,6 @@ static int Nmrp_Parse_Opts(uchar *pkt, NMRP_PARSED_MSG *nmrp_parsed)
 	return remain_len;
 }
 
-#if defined(CFG_SINGLE_FIRMWARE)
-void string_table_bitmask_check(void)
-{
-	int update_bit;
-
-	/* find string tables need to be update, begin with smallest bit */
-	for (update_bit = 0; update_bit < STRING_TABLE_BITMASK_LEN; update_bit++) {
-		if ((NmrpStringTableBitmask & (1 << update_bit)) != 0) {
-			//if bit 0 is set, update ST 1, ... etc
-			NmrpStringTableUpdateList[NmrpStringTableUpdateCount] = update_bit + 1;
-			NmrpStringTableUpdateCount++;
-		}
-	}
-}
-#endif
-
 void NmrpHandler(uchar * pkt, unsigned dest, unsigned src, unsigned type)
 {
 	nmrp_t *nmrphdr= (nmrp_t*) pkt;
@@ -522,33 +462,13 @@ void NmrpHandler(uchar * pkt, unsigned dest, unsigned src, unsigned type)
 					NmrpFwUPOption = 0;
 				}
 
-				/*When NMRP Client get CONF-ACK with ST-UP option*/
-				if ((opt = Nmrp_Parse((uchar *)&nmrp_parsed, NMRP_OPT_ST_UP)) != NULL) {
-					printf("\nRecv ST-UP option\n");
-					NmrpSTUPOption = 1;
-					/* Reset string tables' update related variables. */
-					NmrpStringTableUpdateCount = 0;
-					NmrpStringTableUpdateIndex = 0;
-					memset(NmrpStringTableUpdateList, 0,\
-						sizeof(NmrpStringTableUpdateList));
-
-					/* Save from network byte-order to host byte-order. */
-					NmrpStringTableBitmask = ntohl(opt->value.string_table_bitmask);
-
-					string_table_bitmask_check();
-					printf("\nTotal %d String Table need updating\n",\
-						NmrpStringTableUpdateCount);
-				} else {
-					printf("\nNo ST-UP option\n");
-					NmrpSTUPOption = 0;
-				}
-				if (NmrpFwUPOption == 0 && NmrpSTUPOption == 0) {
+				if (NmrpFwUPOption == 0) {
 					NmrpState = STATE_CLOSING;
-					printf("\nNo firmware update, nor string table update\n");
+					printf("\nNo firmware update\n");
 					NmrpSend();
 				} else {
 					NmrpState = STATE_CONFIGING;
-					printf("\nNMRP WAITING FOR UPLOAD FIRMWARE or STRING TABLES!\n");
+					printf("\nNMRP WAITING FOR UPLOAD FIRMWARE!\n");
 					NmrpSend();
 				}
 #else

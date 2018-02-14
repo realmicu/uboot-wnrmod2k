@@ -8,9 +8,6 @@ extern void NmrpHandler(uchar * pkt, unsigned dest, unsigned src, unsigned type)
 extern int NmrpState;
 #if defined(CFG_SINGLE_FIRMWARE)
 extern int NmrpFwUPOption;
-extern int NmrpSTUPOption;
-extern int NmrpStringTableUpdateCount;
-extern int NmrpStringTableUpdateIndex;
 extern ulong NmrpAliveTimerStart;
 extern ulong NmrpAliveTimerBase;
 extern int NmrpAliveTimerTimeout;
@@ -35,7 +32,6 @@ enum _nmrp_option_types_ {
 	NMRP_OPT_DEV_IP = 0x0002,
 	NMRP_OPT_DEV_REGION = 0x0004,
 	NMRP_OPT_FW_UP = 0x0101,
-	NMRP_OPT_ST_UP = 0x0102,
 	NMRP_OPT_FILE_NAME = 0x0181
 };
 
@@ -84,13 +80,6 @@ enum _nmrp_timeouts_ {
 #define FIRMWARE_FILENAME "firmware"
 #define FIRMWARE_FILENAME_LEN 8
 #define FIRMWARE_FILENAME_OPT_LEN (NMRP_OPT_HEADER_LEN + FIRMWARE_FILENAME_LEN)
-#define STRING_TABLE_BITMASK_LEN 32
-#define STRING_TABLE_NUMBER_MAX STRING_TABLE_BITMASK_LEN
-#define STRING_TABLE_FILENAME_PREFIX "string table "
-#define STRING_TABLE_FILENAME_PREFIX_LEN 13
-#define STRING_TABLE_FILENAME_EXAMPLE "string table 01"
-#define STRING_TABLE_FILENAME_LEN (STRING_TABLE_FILENAME_PREFIX_LEN + 2)
-#define STRING_TABLE_FILENAME_OPT_LEN (NMRP_OPT_HEADER_LEN + STRING_TABLE_FILENAME_LEN)
 
 #define NMRP_MAX_OPT_PER_MSG 6
 typedef struct {

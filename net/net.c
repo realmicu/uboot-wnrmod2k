@@ -97,9 +97,6 @@ extern void NmrpSend(void);
 
 extern int do_reset(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
 extern uint32_t GetMagicNumberOfBoard(void); /* board.c and IH_MAGIC macro */
-extern void board_upgrade_string_table(unsigned char *load_addr,
-				       int table_number,
-				       unsigned int file_size);
 
 #if (CONFIG_COMMANDS & CFG_CMD_NET)
 
@@ -2185,62 +2182,10 @@ void UpgradeFirmwareFromNmrpServer(void)
 #if defined(CFG_SINGLE_FIRMWARE)
 	/* firmware write to flash done */
 	NmrpFwUPOption = 0;
-	if (NmrpSTUPOption == 1) {
-		NmrpState = STATE_CONFIGING;
-	} else {
-		NmrpState = STATE_CLOSING;
-	}
-#else
+#endif
 	NmrpState = STATE_CLOSING;
-#endif
 	NetSetHandler(NmrpHandler);
 	NmrpSend();
-	NetRunTftpServer = 0;
-}
-#endif
-
-#if defined(CFG_NMRP) && defined(CFG_SINGLE_FIRMWARE)
-void UpgradeStringTableFromNmrpServer(int table_num)
-{
-	NetRunTftpServer = 1;
-	load_addr = 0x80060000;
-	ulong addr;
-	int file_size;
-
-	addr = load_addr;
-	memset((void *)addr, 0, CFG_STRING_TABLE_LEN);
-	file_size = NetLoop (TFTP);
-	if (file_size < 1)
-	{
-		printf ("\nUpdating string table %d from TFTP server \
-			is stopped or failed! :( \n", table_num);
-		NetRunTftpServer = 0;
-		return;
-	}
-
-	/* TFTP Uploading done */
-	NmrpState = STATE_TFTPUPLOADING;
-	NetSetHandler(NmrpHandler);
-	NmrpSend();
-
-	/* Write String Table to flash */
-	board_upgrade_string_table((uchar *)addr, table_num, file_size);
-
-	/* upgrade string table done, check if more files */
-	NmrpStringTableUpdateIndex++;
-	if (NmrpStringTableUpdateIndex == NmrpStringTableUpdateCount)
-		NmrpSTUPOption = 0;
-	if (NmrpFwUPOption == 0 && NmrpSTUPOption == 0) {
-		printf("Upgrading all done\n");
-		NmrpState = STATE_CLOSING;
-		NetSetHandler(NmrpHandler);
-		NmrpSend();
-	} else {
-		printf("More files to be upgrading\n");
-		NmrpState = STATE_CONFIGING;
-		NetSetHandler(NmrpHandler);
-		NmrpSend();
-	}
 	NetRunTftpServer = 0;
 }
 #endif
