@@ -63,6 +63,7 @@
 #if (FLASH_SIZE == 16)
 #	define CFG_MAX_FLASH_SECT	256		/* max number of sectors on one 16MB chip */
 #	define CFG_FLASH_SIZE		0x01000000	/* Total 16MB flash size */
+#	define CFG_IMAGE_LEN		0x00e60000	/* max OS image length (based on vendor firmware) */
 #	define BOARDCAL			(CFG_FLASH_BASE + 0x00ff0000)	/* ART: System config */
 #	define WLANCAL			(CFG_FLASH_BASE + 0x00ff1000)	/* ART: Radio calibration */
 #	define MTDPARTS_DEFAULT		"mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),16000k(firmware),64k(art)"
@@ -70,6 +71,7 @@
 #elif (FLASH_SIZE == 8)
 #	define CFG_MAX_FLASH_SECT	128		/* max number of sectors on one 8MB chip */
 #	define CFG_FLASH_SIZE		0x00800000	/* Total 8MB flash size */
+#	define CFG_IMAGE_LEN		0x00670000	/* max OS image length (based on vendor firmware) */
 #	define BOARDCAL			(CFG_FLASH_BASE + 0x007f0000)	/* ART: System config */
 #	define WLANCAL			(CFG_FLASH_BASE + 0x007f1000)	/* ART: Radio calibration */
 #	define MTDPARTS_DEFAULT		"mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),7808k(firmware),64k(art)"
@@ -77,6 +79,7 @@
 #elif (FLASH_SIZE == 4)
 #	define CFG_MAX_FLASH_SECT	64		/* max number of sectors on one 4MB chip */
 #	define CFG_FLASH_SIZE		0x00400000	/* Total 4MB flash size */
+#	define CFG_IMAGE_LEN		0x00350000	/* max OS image length (based on vendor firmware) */
 #	define BOARDCAL			(CFG_FLASH_BASE + 0x003f0000)	/* ART: System config */
 #	define WLANCAL			(CFG_FLASH_BASE + 0x003f1000)	/* ART: Radio calibration */
 #	define MTDPARTS_DEFAULT		"mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),3712k(firmware),64k(art)"
@@ -117,7 +120,6 @@
 #define	CFG_MONITOR_LEN			(192 << 10)
 
 #ifdef FIRMWARE_RECOVER_FROM_TFTP_SERVER
-#	define CFG_IMAGE_LEN			0x350000
 #	define CFG_IMAGE_BASE_ADDR		(CFG_ENV_ADDR + CFG_ENV_SIZE)
 #	define CFG_IMAGE_ADDR_BEGIN		(CFG_IMAGE_BASE_ADDR)
 #	define CFG_IMAGE_ADDR_END		(CFG_IMAGE_BASE_ADDR + CFG_IMAGE_LEN)
