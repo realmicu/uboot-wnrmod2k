@@ -701,3 +701,16 @@ U_BOOT_CMD(
          );
 
 #endif
+
+extern int checkboard(void);
+
+int do_banner(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+{
+	return checkboard();
+}
+
+U_BOOT_CMD(
+	banner, 1, 0, do_banner,
+	"banner  - show banner\n",
+	"\n  show banner with device info displayed at boot\n"
+);
