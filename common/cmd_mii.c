@@ -980,8 +980,7 @@ int do_snshow(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 U_BOOT_CMD(
 	snshow, 1, 0, do_snshow,
 	"snshow  - show serial number\n",
-	"snshow  - show device board serial number\n"
-	"          stored in ART area\n"
+	"\n  show device board serial number stored in ART area\n"
 );
 
 #endif
