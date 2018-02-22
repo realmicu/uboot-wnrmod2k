@@ -187,8 +187,10 @@ extern int cramfs_info (struct part_info *info);
 #if (CONFIG_FS & CFG_FS_SQUASHFS)
 extern int squashfs_check(struct part_info *info);
 extern int squashfs_load (char *loadoffset, struct part_info *info, char *filename);
-extern int squashfs_ls (struct part_info *info, char *filename);
 extern int squashfs_info (struct part_info *info);
+#if 0 /* disabled due to memory leak somewhere in squashfs_lookup() */
+extern int squashfs_ls (struct part_info *info, char *filename);
+#endif
 #endif
 
 static struct part_info* jffs2_part_info(struct mtd_device *dev, unsigned int part_num);
@@ -1948,11 +1950,13 @@ int do_jffs2_ls(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 		if (cramfs_check(part)) {
 			ret = cramfs_ls (part, filename);
 		}
+#if 0 /* disabled due to memory leak somewhere in squashfs_lookup() */
 #if (CONFIG_FS & CFG_FS_SQUASHFS)
 		else if(squashfs_check(part))
 		{
 			ret = squashfs_ls (part, filename);
 		}
+#endif
 #endif
 		 else {
 			/* if this is not cramfs assume jffs2 */

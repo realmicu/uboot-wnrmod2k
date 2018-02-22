@@ -573,7 +573,7 @@ static unsigned int squashfs_lookup (struct part_info *info, char *entryname, ch
 		return 1;
 }
 
-
+#if 0 /* disabled due to memory leak somewhere in squashfs_lookup() */
 int squashfs_ls (struct part_info *info, char *filename)
 {
 	char *name;
@@ -594,6 +594,7 @@ int squashfs_ls (struct part_info *info, char *filename)
 	}
 	return 1;
 }
+#endif
 
 
 int squashfs_info (struct part_info *info)
