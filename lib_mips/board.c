@@ -352,6 +352,10 @@ void board_init_f(ulong bootflag)
 	print_size (gd->ram_size, "\n");
 #endif
 
+#ifdef COMPACT_UBOOT
+	puts("Notice: compiled with COMPACT_UBOOT flag set\n");
+#endif
+
 	/*
 	 * Now that we have DRAM mapped and working, we can
 	 * relocate the code and continue running from DRAM.

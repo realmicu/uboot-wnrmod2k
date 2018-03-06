@@ -42,6 +42,7 @@
 #define CFG_HUSH_PARSER
 #define CFG_PROMPT_HUSH_PS2		"hush>"
 
+#define CFG_FLASH_SECTOR_SIZE		(64 * 1024)
 #define CFG_FLASH_WORD_SIZE     	unsigned short
 #define CFG_FLASH_ADDR0			(0x5555)
 #define CFG_FLASH_ADDR1			(0x2AAA)
@@ -50,6 +51,27 @@
 #define CONFIG_MEMSIZE_IN_BYTES
 #define CONFIG_PCI
 
+/* U-boot vendor/compact mode selection */
+#if (COMPACT_UBOOT == 0)
+#	undef COMPACT_UBOOT
+#endif
+
+#ifdef COMPACT_UBOOT
+#	define UBOOT_BIN_SIZE_IN_KB	256
+#	define UBOOT_ENV_SIZE_IN_KB	64
+#	define UBOOT_FLASH_SIZE		(UBOOT_BIN_SIZE_IN_KB * 1024)
+#	define CFG_ENV_SIZE		(CFG_FLASH_SECTOR_SIZE)
+#	define CONFIG_JFFS2_PART_OFFSET	0x50040
+#	define CONFIG_EXTRA_ENV_SETTINGS "clearenv=erase 0xbf040000 +0x10000\0"
+#else
+#	define UBOOT_BIN_SIZE_IN_KB	320
+#	define UBOOT_ENV_SIZE_IN_KB	128
+#	define UBOOT_FLASH_SIZE		(UBOOT_BIN_SIZE_IN_KB * 1024)
+#	define CFG_ENV_SIZE		(CFG_FLASH_SECTOR_SIZE * 2)
+#	define CONFIG_JFFS2_PART_OFFSET	0x70040
+#	define CONFIG_EXTRA_ENV_SETTINGS "clearenv=erase 0xbf050000 +0x20000\0"
+#endif
+
 /*
  ***********
  *  FLASH  *
@@ -57,40 +79,52 @@
  */
 #define CFG_MAX_FLASH_BANKS	1	/* max number of memory banks */
 
-#define CFG_FLASH_SECTOR_SIZE   (64*1024)
-
 #define CFG_FLASH_BASE		0xbf000000
 
 #if (FLASH_SIZE == 16)
 #	define CFG_MAX_FLASH_SECT	256		/* max number of sectors on one 16MB chip */
 #	define CFG_FLASH_SIZE		0x01000000	/* Total 16MB flash size */
-#	define CFG_IMAGE_LEN		0x00e40000	/* max OS image length (based on vendor firmware) */
 #	define BOARDCAL			(CFG_FLASH_BASE + 0x00ff0000)	/* ART: System config */
 #	define MERLIN24CAL		(CFG_FLASH_BASE + 0x00ff1000)
 #	define MERLIN50CAL		(CFG_FLASH_BASE + 0x00ff5000)
-#	define MTDPARTS_DEFAULT		"mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),15872k(firmware),64k(art)"
-#	define CONFIG_BOOTARGS		"console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),15872k(firmware),64k(art) REVISIONID"
+#	ifdef COMPACT_UBOOT
+#		define CFG_IMAGE_LEN	0x00e60000	/* max OS image length (based on vendor firmware) */
+#		define MTDPARTS_DEFAULT	"mtdparts=ar7100-nor0:256k(u-boot),64k(u-boot-env),16000k(firmware),64k(art)"
+#	else
+#		define CFG_IMAGE_LEN	0x00e40000	/* max OS image length (based on vendor firmware) */
+#		define MTDPARTS_DEFAULT	"mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),15872k(firmware),64k(art)"
+#	endif
 #elif (FLASH_SIZE == 8)
 #	define CFG_MAX_FLASH_SECT	128		/* max number of sectors on one 8MB chip */
 #	define CFG_FLASH_SIZE		0x00800000	/* Total 8MB flash size */
-#	define CFG_IMAGE_LEN		0x00720000	/* max OS image length (based on vendor firmware) */
 #	define BOARDCAL			(CFG_FLASH_BASE + 0x007f0000)	/* ART: System config */
 #	define MERLIN24CAL		(CFG_FLASH_BASE + 0x007f1000)
 #	define MERLIN50CAL		(CFG_FLASH_BASE + 0x007f5000)
-#	define MTDPARTS_DEFAULT		"mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),7680k(firmware),64k(art)"
-#	define CONFIG_BOOTARGS		"console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),7680k(firmware),64k(art) REVISIONID"
+#	ifdef COMPACT_UBOOT
+#		define CFG_IMAGE_LEN	0x00740000	/* max OS image length (based on vendor firmware) */
+#		define MTDPARTS_DEFAULT	"mtdparts=ar7100-nor0:256k(u-boot),64k(u-boot-env),7808k(firmware),64k(art)"
+#	else
+#		define CFG_IMAGE_LEN	0x00720000	/* max OS image length (based on vendor firmware) */
+#		define MTDPARTS_DEFAULT	"mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),7680k(firmware),64k(art)"
+#	endif
 #elif (FLASH_SIZE == 4)
 #	define CFG_MAX_FLASH_SECT	64		/* max number of sectors on one 4MB chip */
 #	define CFG_FLASH_SIZE		0x00400000	/* Total 4MB flash size */
-#	define CFG_IMAGE_LEN		0x00350000	/* max OS image length (based on vendor firmware) */
 #	define BOARDCAL			(CFG_FLASH_BASE + 0x003f0000)	/* ART: System config */
 #	define MERLIN24CAL		(CFG_FLASH_BASE + 0x003f1000)
 #	define MERLIN50CAL		(CFG_FLASH_BASE + 0x003f5000)
-#	define MTDPARTS_DEFAULT		"mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),3584k(firmware),64k(art)"
-#	define CONFIG_BOOTARGS		"console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),3584k(firmware),64k(art) REVISIONID"
+#	ifdef COMPACT_UBOOT
+#		define CFG_IMAGE_LEN	0x00370000	/* max OS image length (based on vendor firmware) */
+#		define MTDPARTS_DEFAULT	"mtdparts=ar7100-nor0:256k(u-boot),64k(u-boot-env),3712k(firmware),64k(art)"
+#	else
+#		define CFG_IMAGE_LEN	0x00350000	/* max OS image length (based on vendor firmware) */
+#		define MTDPARTS_DEFAULT	"mtdparts=ar7100-nor0:320k(u-boot),128k(u-boot-env),3584k(firmware),64k(art)"
+#	endif
 #else
 #	error "Invalid flash configuration"
 #endif
+
+#define CONFIG_BOOTARGS		"console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init " MTDPARTS_DEFAULT " REVISIONID"
 
 #if (CFG_MAX_FLASH_SECT * CFG_FLASH_SECTOR_SIZE) != CFG_FLASH_SIZE
 #	error "Invalid flash configuration"
@@ -104,12 +138,9 @@
  *  U-boot  *
  ************
  */
-#define UBOOT_FLASH_SIZE		(320 * 1024)
 
 #define CFG_ENV_ADDR			(CFG_FLASH_BASE + UBOOT_FLASH_SIZE)
-#define CFG_ENV_SIZE			(CFG_FLASH_SECTOR_SIZE * 2)
 #define	CFG_ENV_IS_IN_FLASH		1
-
 #undef CFG_ENV_IS_NOWHERE
 
 #ifdef ENABLE_DYNAMIC_CONF
@@ -234,7 +265,6 @@
  */
 #undef CFG_JFFS_CUSTOM_PART
 #define MTDIDS_DEFAULT			"nor0=ar7100-nor0"
-#define CONFIG_JFFS2_PART_OFFSET	0x70040
 
 /*
  **************
@@ -246,8 +276,5 @@
 #define	CFG_LONGHELP			/* undef to save memory */
 
 #define CONFIG_BOOTCOMMAND "fsload 80800000 image/uImage;bootm 80800000"
-
-#define CONFIG_EXTRA_ENV_SETTINGS \
-"clearenv=erase 0xbf050000 +0x10000\0"
 
 #endif	/* __WNDR_COMMON_H */

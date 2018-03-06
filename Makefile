@@ -353,6 +353,9 @@ wndr3700v1h2_config:	unconfig
 ifdef FLASH_SIZE
 	@echo "#define FLASH_SIZE" $(FLASH_SIZE) >>include/config.h
 endif
+ifdef COMPACT_UBOOT
+	@echo "#define COMPACT_UBOOT" $(COMPACT_UBOOT) >>include/config.h
+endif
 	@./mkconfig -a wndr3700v1h2 mips mips wndr3700v1h2 ar7100 ar7100
 wndr3700u_config:	unconfig
 	@ >include/config.h
@@ -361,6 +364,9 @@ wndr3700u_config:	unconfig
 	@echo "#define CONFIG_WNDR3700U_LED 1" >>include/config.h
 ifdef FLASH_SIZE
 	@echo "#define FLASH_SIZE" $(FLASH_SIZE) >>include/config.h
+endif
+ifdef COMPACT_UBOOT
+	@echo "#define COMPACT_UBOOT" $(COMPACT_UBOOT) >>include/config.h
 endif
 	@./mkconfig -a wndr3700u mips mips wndr3700u ar7100 ar7100
 
