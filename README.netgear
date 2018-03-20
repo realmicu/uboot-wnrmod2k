@@ -14,7 +14,7 @@
   Build instructions
  --------------------
 
- # make MODEL_config [ FLASH_SIZE=n ]
+ # make MODEL_config [ FLASH_SIZE=n ] [ OPENWRT_COMPAT=1] [ COMPACT_UBOOT=1 ]
 
    Where MODEL is one of following:
 
@@ -25,8 +25,20 @@
    wndr3700v1
    wndr3700v2
 
-   and n is 4 , 8 or 16 (flash size in Megabytes) - if not defined,
-   board's default is used.
+   FLASH_SIZE=n:
+   n is 4, 8 or 16 (flash size in Megabytes) - if not defined, board's
+   default is used
+
+   OPENWRT_COMPAT=1: [not yet supported!]
+   enable LEDE/OpenWrt compatibility, uboot is adapted to image size
+   and layout of this OS, unneeded features are dropped, rootfs_data
+   reset is implemented. WARNING: vendor firmware will no longer work.
+
+   COMPACT_UBOOT=1:
+   Valid only for WNDR3700* devices, where factory uboot is 320kB and
+   uboot-env is 128kB. This makes both area compact, so uboot takes
+   256kB and env is 64kB, thus 128kB is freed for OS. WARNING: vendor
+   firmware probably will no longer work.
 
  # make
 
