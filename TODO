@@ -1,0 +1,67 @@
+
+* lib_mips/board.c : verify if all routines apply correctly to WNDR3700v1&v2
+
+* verify need for *reset_default() family of functions; see below
+
+* verify need for CFG_SINGLE_FIRMWARE, especially in net/net.c and net/nmrp.c
+  (maybe rewrite TFTP flashing?)
+
+* create showflash command that shows flash layout
+
+* change factory reset from resetting config partition (will be dropped because
+  OpenWrt ignores it) to resetting rootfs_data - needs squashfs basic support
+  implemented to recognize rootfs_data within rootfs
+
+  jffs2 node "rootfs_data" has below header at the beginning of every 64kB
+  erase block:
+  19 85 20 03 00 00 00 0c  f0 60 dc 98 ff ff ff ff
+
+  struct jffs2_unknown_node
+  {
+  	/* All start like this */
+  	jint16_t magic;
+  	jint16_t nodetype;
+  	jint32_t totlen; /* So we can skip over nodes we don't grok */
+  	jint32_t hdr_crc;
+  };
+
+  so scan memory above image until ART for these bytes and first occurence marks
+  beginning of rootfs_data partition; for image length check commands imls/iminfo
+
+* enable HW ID for WNDR3700v1 based on PCB number
+
+* add OPENWRT_COMPAT flag which changes image to be OpenWrt/LEDE
+  friendly.
+  + allowed max image sizes:
+    for  4M : 256k uboot +  64k env -> CFG_IMAGE_LEN = 0x003A0000 - rootfs_reserved
+    for  8M : 256k uboot +  64k env -> CFG_IMAGE_LEN = 0x007A0000 - rootfs_reserved
+    for  8M : 320k uboot + 128k env -> CFG_IMAGE_LEN = 0x00780000 - rootfs_reserved
+    for 16M : 256k uboot +  64k env -> CFG_IMAGE_LEN = 0x00FA0000 - rootfs_reserved
+    for 16M : 320k uboot + 128k env -> CFG_IMAGE_LEN = 0x00F80000 - rootfs_reserved
+    assume rootfs_reserved = 128k or 256k
+    UPDATE: according to OpenWRT docs, 3 eraseblocks are reserved (192k)
+
+  + add reset rootfs_data command and function when factory defaults
+    are enforced
+
+* Fix size in below command:
+
+  wndr3700v1> fsinfo
+  ### filesystem type is SQUASHFS
+  SquashFS version: 3.0
+  Files: 3
+  Bytes_used: -2080982040	<<!!!
+  Block_size: 65536
+  Inodes are compressed
+  Data is compressed
+  Fragments are compressed
+  Check data is not present in the filesystem
+  Fragments are present in the filesystem
+  Always_use_fragments option is not specified
+  Duplicates are removed
+  Filesystem size -2080982040 bytes	<<!!!
+  Number of fragments 0
+  Number of inodes 3
+  Number of uids 1
+  Number of gids 0
+
