@@ -8,6 +8,12 @@
 
 * create showflash command that shows flash layout
 
+* WNR612v2: explore possibility of special Power LED flashing during u-boot
+  startup (may be powered off when entering CLI). This router has no amber LED
+  and all LEDs are off while u-boot is loading, so it looks that nothing is
+  happening (blinking should differ from two OpenWrt modes and emergency flash).
+  Timer ? Any conflicts ?
+
 * change factory reset from resetting config partition (will be dropped because
   OpenWrt ignores it) to resetting rootfs_data - needs squashfs basic support
   implemented to recognize rootfs_data within rootfs
