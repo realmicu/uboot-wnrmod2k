@@ -121,8 +121,17 @@ static void drawline(void)
 int checkboard (void)
 {
     /* printf("WNR1000v2-VC (ar7240) U-boot dni25 V1.7\n"); */
+    char *soc_model;
+    if (is_ar7240())
+	soc_model = "ar7240";
+    else if (is_ar7241())
+	soc_model = "ar7241";
+    else if (is_ar7242())
+	soc_model = "ar7242";
+    else
+	soc_model = "ar7xxx";
     drawline();
-    printf(" WNR1000v2-VC (ar7240), %d MHz, 32 MB RAM, %d MB flash\n", CFG_HZ/500000, FLASH_SIZE);
+    printf(" WNR1000v2-VC (%s), %d MHz, 32 MB RAM, %d MB flash\n", soc_model, CFG_HZ/500000, FLASH_SIZE);
     drawline();
     return 0;
 }
@@ -135,8 +144,17 @@ static void drawline(void)
 int checkboard (void)
 {
     /* printf(" WNR1000v2-VM (ar7240) U-boot dni25 V1.7\n"); */
+    char *soc_model;
+    if (is_ar7240())
+	soc_model = "ar7240";
+    else if (is_ar7241())
+	soc_model = "ar7241";
+    else if (is_ar7242())
+	soc_model = "ar7242";
+    else
+	soc_model = "ar7xxx";
     drawline();
-    printf("WNR1000v2-VM (ar7240), %d MHz, 32 MB RAM, %d MB flash\n", CFG_HZ/500000, FLASH_SIZE);
+    printf("WNR1000v2-VM (%s), %d MHz, 32 MB RAM, %d MB flash\n", soc_model, CFG_HZ/500000, FLASH_SIZE);
     drawline();
     return 0;
 }
@@ -149,8 +167,17 @@ static void drawline(void)
 int checkboard (void)
 {
     /* printf("WNR1000v2 (ar7240) U-boot dni25 V1.8\n"); */
+    char *soc_model;
+    if (is_ar7240())
+	soc_model = "ar7240";
+    else if (is_ar7241())
+	soc_model = "ar7241";
+    else if (is_ar7242())
+	soc_model = "ar7242";
+    else
+	soc_model = "ar7xxx";
     drawline();
-    printf(" WNR1000v2 (ar7240), %d MHz, 32 MB RAM, %d MB flash\n", CFG_HZ/500000, FLASH_SIZE);
+    printf(" WNR1000v2 (%s), %d MHz, 32 MB RAM, %d MB flash\n", soc_model, CFG_HZ/500000, FLASH_SIZE);
     drawline();
     return 0;
 }

@@ -127,8 +127,17 @@ static void drawline(void)
 int checkboard (void)
 {
     /* printf("U-boot WNR612 V0.2, built on %s\n", __DATE__); */
+    char *soc_model;
+    if (is_ar7240())
+	soc_model = "ar7240";
+    else if (is_ar7241())
+	soc_model = "ar7241";
+    else if (is_ar7242())
+	soc_model = "ar7242";
+    else
+	soc_model = "ar7xxx";
     drawline();
-    printf(" WNR612v2 (ar7240), %d MHz, 32 MB RAM, %d MB flash\n", CFG_HZ/500000, FLASH_SIZE);
+    printf(" WNR612v2 (%s), %d MHz, 32 MB RAM, %d MB flash\n", soc_model, CFG_HZ/500000, FLASH_SIZE);
     drawline();
     return 0;
 }
